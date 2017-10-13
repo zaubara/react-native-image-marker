@@ -293,6 +293,7 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
                   color:(NSString*)color
                   fontName:(NSString*)fontName
                   fontSize:(CGFloat)fontSize
+                  quality:(CGFloat)quality
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -320,7 +321,7 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
         }
         NSLog(@" file from the path");
         
-        saveImageForMarker(fullPath, scaledImage, 1);
+        saveImageForMarker(fullPath, scaledImage, quality);
         resolve(fullPath);
     }];
 }
@@ -331,6 +332,7 @@ RCT_EXPORT_METHOD(addTextByPostion: (NSString *)path
                   color:(NSString*)color
                   fontName:(NSString*)fontName
                   fontSize:(CGFloat)fontSize
+                  quality:(CGFloat)quality
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -361,7 +363,7 @@ RCT_EXPORT_METHOD(addTextByPostion: (NSString *)path
         }
         NSLog(@" file from the path");
         
-        saveImageForMarker(fullPath, scaledImage, 1);
+        saveImageForMarker(fullPath, scaledImage, quality);
         resolve(fullPath);
     }];
 }
@@ -372,6 +374,7 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
                   X:(CGFloat)X
                   Y:(CGFloat)Y
                   scale:(CGFloat)scale
+                  quality:(CGFloat)quality
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -406,7 +409,7 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
             }
             NSLog(@" file from the path");
             
-            saveImageForMarker(fullPath, scaledImage, 1);
+            saveImageForMarker(fullPath, scaledImage, quality);
             resolve(fullPath);
         }];
     }];
@@ -416,6 +419,7 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
                   markImagePath: (NSString *)markerPath
                   position:(MarkerPosition)position
                   scale:(CGFloat)scale
+                  quality:(CGFloat)quality
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -450,7 +454,7 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
             }
             NSLog(@" file from the path");
             
-            saveImageForMarker(fullPath, scaledImage, 1);
+            saveImageForMarker(fullPath, scaledImage, quality);
             resolve(fullPath);
         }];
     }];
@@ -461,3 +465,4 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
 
 
 @end
+
