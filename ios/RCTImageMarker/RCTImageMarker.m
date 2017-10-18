@@ -241,6 +241,9 @@ UIImage * markerImgByPostion(UIImage *image, NSString* text, MarkerPosition posi
             };
             break;
     }
+    [[UIColor whiteColor] setFill];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:[font pointSize] / 4];
+    [path fillWithBlendMode:kCGBlendModeNormal alpha:0.3];
     [text drawInRect:rect withAttributes:attr];
     UIImage *aimg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
