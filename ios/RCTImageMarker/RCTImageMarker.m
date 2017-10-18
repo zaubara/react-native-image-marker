@@ -93,7 +93,7 @@ UIImage * markeImageWithImage(UIImage *image, UIImage * waterImage, CGFloat X, C
     int ww = waterImage.size.width * scale;
     int wh = waterImage.size.height * scale;
     
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, 1);
     [image drawInRect:CGRectMake(0, 0, w, h)];
     CGRect position = CGRectMake(X, Y, ww, wh);
     [waterImage drawInRect:position];
@@ -108,7 +108,7 @@ UIImage * markeImageWithImageByPostion(UIImage *image, UIImage * waterImage, Mar
     
     int ww = waterImage.size.width * scale;
     int wh = waterImage.size.height * scale;
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, 1);
     [image drawInRect:CGRectMake(0, 0, w, h)];
     
     CGSize size = CGSizeMake(ww, wh);
