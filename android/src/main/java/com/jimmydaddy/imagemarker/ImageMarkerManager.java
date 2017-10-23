@@ -49,10 +49,11 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      * @param color
      * @param fontName
      * @param fontSize
+     * @param quality
      * @param promise
      */
     @ReactMethod
-    public void addText(String imgSavePath, String mark, Integer X, Integer Y, String color, String fontName, int fontSize, Float quality, Promise promise) {
+    public void addText(String imgSavePath, String mark, Integer X, Integer Y, String color, String fontName, int fontSize, Integer quality, Promise promise) {
        if (TextUtils.isEmpty(mark)){
            promise.reject("error", "mark should not be empty", null);
        }
@@ -159,7 +160,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
-            icon.compress(Bitmap.CompressFormat.JPEG, (int) quality, bos);
+            icon.compress(Bitmap.CompressFormat.JPEG, quality, bos);
             bos.flush();
             //保存成功的
             promise.resolve(resultFile);
@@ -194,7 +195,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      * @param promise
      */
     @ReactMethod
-    public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Float quality, Promise promise) {
+    public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, Promise promise) {
         if (TextUtils.isEmpty(mark)){
             promise.reject("error", "mark should not be empty", null);
         }
@@ -298,7 +299,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
-            icon.compress(Bitmap.CompressFormat.JPEG, (int) quality, bos);
+            icon.compress(Bitmap.CompressFormat.JPEG, quality, bos);
             bos.flush();
             //保存成功的
             promise.resolve(resultFile);
@@ -323,7 +324,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void markWithImage(String imgSavePath, String markerPath, Integer X, Integer Y, Float scale, Float quality, Promise promise ) {
+    public void markWithImage(String imgSavePath, String markerPath, Integer X, Integer Y, Float scale, Integer quality, Promise promise ) {
         BufferedOutputStream bos = null;
         boolean isFinished;
         Bitmap icon = null;
@@ -450,7 +451,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
-            icon.compress(Bitmap.CompressFormat.JPEG, (int) quality, bos);
+            icon.compress(Bitmap.CompressFormat.JPEG, quality, bos);
             bos.flush();
             //保存成功的
             promise.resolve(resultFile);
@@ -475,7 +476,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void markWithImageByPosition(String imgSavePath, String markerPath, String position, Float scale, Float quality, Promise promise ) {
+    public void markWithImageByPosition(String imgSavePath, String markerPath, String position, Float scale, Integer quality, Promise promise ) {
         BufferedOutputStream bos = null;
         Bitmap icon = null;
         Bitmap marker = null;
@@ -607,7 +608,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
-            icon.compress(Bitmap.CompressFormat.JPEG, (int) quality, bos);
+            icon.compress(Bitmap.CompressFormat.JPEG, quality, bos);
             bos.flush();
             //保存成功的
             promise.resolve(resultFile);
