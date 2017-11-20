@@ -55,15 +55,19 @@ void saveImageForMarker(NSString * fullPath, UIImage * image, float quality)
     [fileManager createFileAtPath:fullPath contents:data attributes:nil];
 }
 
-NSString * generateCacheFilePathForMarker(NSString * ext)
+NSString * generateCacheFilePathForMarker(NSString * ext, NSString * fileName)
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths firstObject];
-    NSString* name = [[NSUUID UUID] UUIDString];
-    NSString* fullName = [NSString stringWithFormat:@"%@%@", name, ext];
-    NSString* fullPath = [cacheDirectory stringByAppendingPathComponent:fullName];
-    
-    return fullPath;
+    if (fileName != nil) {
+        NSString* fullPath = [cacheDirectory stringByAppendingPathComponent:fileName];
+        return fullPath;
+    } else {
+        NSString* name = [[NSUUID UUID] UUIDString];
+        NSString* fullName = [NSString stringWithFormat:@"%@%@", name, ext];
+        NSString* fullPath = [cacheDirectory stringByAppendingPathComponent:fullName];
+        return fullPath;
+    }
 }
 
 UIImage * markerImg(UIImage *image, NSString* text, CGFloat X, CGFloat Y, UIColor* color, UIFont* font){
@@ -303,10 +307,11 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
                   fontName:(NSString*)fontName
                   fontSize:(CGFloat)fontSize
                   quality:(CGFloat)quality
+                  fileName:(NSString*)fileName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg");
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -342,10 +347,11 @@ RCT_EXPORT_METHOD(addTextByPostion: (NSString *)path
                   fontName:(NSString*)fontName
                   fontSize:(CGFloat)fontSize
                   quality:(CGFloat)quality
+                  fileName:(NSString*)fileName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg");
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -384,10 +390,11 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
                   Y:(CGFloat)Y
                   scale:(CGFloat)scale
                   quality:(CGFloat)quality
+                  fileName:(NSString*)fileName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg");
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -429,10 +436,11 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
                   position:(MarkerPosition)position
                   scale:(CGFloat)scale
                   quality:(CGFloat)quality
+                  fileName:(NSString*)fileName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg");
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
