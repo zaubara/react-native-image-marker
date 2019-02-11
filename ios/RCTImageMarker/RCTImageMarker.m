@@ -60,7 +60,7 @@ NSString * generateCacheFilePathForMarker(NSString * ext, NSString * fileName, N
     NSString* saveDirectory = nil;
     
     if ([saveLocation length]) {
-        saveDirectory = saveLocation
+        saveDirectory = saveLocation;
     } else {
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         saveDirectory = [paths firstObject];
