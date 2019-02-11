@@ -55,17 +55,24 @@ void saveImageForMarker(NSString * fullPath, UIImage * image, float quality)
     [fileManager createFileAtPath:fullPath contents:data attributes:nil];
 }
 
-NSString * generateCacheFilePathForMarker(NSString * ext, NSString * fileName)
+NSString * generateCacheFilePathForMarker(NSString * ext, NSString * fileName, NSString * saveLocation)
 {
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths firstObject];
+    NSString* saveDirectory = nil;
+    
+    if ([saveLocation length]) {
+        saveDirectory = saveLocation
+    } else {
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        saveDirectory = [paths firstObject];
+    }
+    
     if (fileName != nil) {
-        NSString* fullPath = [cacheDirectory stringByAppendingPathComponent:fileName];
+        NSString* fullPath = [saveDirectory stringByAppendingPathComponent:fileName];
         return fullPath;
     } else {
         NSString* name = [[NSUUID UUID] UUIDString];
         NSString* fullName = [NSString stringWithFormat:@"%@%@", name, ext];
-        NSString* fullPath = [cacheDirectory stringByAppendingPathComponent:fullName];
+        NSString* fullPath = [saveDirectory stringByAppendingPathComponent:fullName];
         return fullPath;
     }
 }
@@ -308,10 +315,11 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
                   fontSize:(CGFloat)fontSize
                   quality:(CGFloat)quality
                   fileName:(NSString*)fileName
+                  saveLocation:(NSString*)saveLocation
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -348,10 +356,11 @@ RCT_EXPORT_METHOD(addTextByPostion: (NSString *)path
                   fontSize:(CGFloat)fontSize
                   quality:(CGFloat)quality
                   fileName:(NSString*)fileName
+                  saveLocation:(NSString*)saveLocation
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -391,10 +400,11 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
                   scale:(CGFloat)scale
                   quality:(CGFloat)quality
                   fileName:(NSString*)fileName
+                  saveLocation:(NSString*)saveLocation
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
@@ -437,10 +447,11 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
                   scale:(CGFloat)scale
                   quality:(CGFloat)quality
                   fileName:(NSString*)fileName
+                  saveLocation:(NSString*)saveLocation
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName);
+    NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
     [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {

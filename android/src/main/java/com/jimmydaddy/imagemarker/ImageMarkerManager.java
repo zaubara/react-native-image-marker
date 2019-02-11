@@ -54,7 +54,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      * @param promise
      */
     @ReactMethod
-    public void addText(String imgSavePath, String mark, Integer X, Integer Y, String color, String fontName, int fontSize, Integer quality, String fileName, Promise promise) {
+    public void addText(String imgSavePath, String mark, Integer X, Integer Y, String color, String fontName, int fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
        if (TextUtils.isEmpty(mark)){
            promise.reject("error", "mark should not be empty", null);
        }
@@ -157,7 +157,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             }
             canvas.drawText(mark, pX, pY, textPaint);
 
-            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName);
+            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName, saveLocation);
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
@@ -196,7 +196,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      * @param promise
      */
     @ReactMethod
-    public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, Promise promise) {
+    public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
         if (TextUtils.isEmpty(mark)){
             promise.reject("error", "mark should not be empty", null);
         }
@@ -346,7 +346,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             canvas.save(Canvas.ALL_SAVE_FLAG);
             canvas.restore();
 
-            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName);
+            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName, saveLocation);
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
@@ -375,7 +375,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void markWithImage(String imgSavePath, String markerPath, Integer X, Integer Y, Float scale, Integer quality, String fileName, Promise promise ) {
+    public void markWithImage(String imgSavePath, String markerPath, Integer X, Integer Y, Float scale, Integer quality, String fileName, String saveLocation, Promise promise ) {
         BufferedOutputStream bos = null;
         boolean isFinished;
         Bitmap icon = null;
@@ -498,7 +498,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             canvas.save(Canvas.ALL_SAVE_FLAG);
             // 存储
             canvas.restore();
-            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName);
+            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName, saveLocation);
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
@@ -527,7 +527,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void markWithImageByPosition(String imgSavePath, String markerPath, String position, Float scale, Integer quality, String fileName, Promise promise ) {
+    public void markWithImageByPosition(String imgSavePath, String markerPath, String position, Float scale, Integer quality, String fileName, String saveLocation, Promise promise ) {
         BufferedOutputStream bos = null;
         Bitmap icon = null;
         Bitmap marker = null;
@@ -655,7 +655,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             // 存储
             canvas.restore();
 
-            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName);
+            String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName, saveLocation);
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
 
 //            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
@@ -726,17 +726,21 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
         return pos;
     }
 
-    private String generateCacheFilePathForMarker(String imgSavePath, String fileName){
+    private String generateCacheFilePathForMarker(String imgSavePath, String fileName, String saveLocation){
         String originName = imgSavePath.substring(imgSavePath.lastIndexOf("/") + 1, imgSavePath.length());
 
-        String cacheDir = this.getReactApplicationContext().getCacheDir().getAbsolutePath();
-
+        String saveDir = "";
+        if (saveLocation.length() > 0) {
+            saveDir = saveLocation;
+        } else {
+            saveDir = this.getReactApplicationContext().getCacheDir().getAbsolutePath();
+        }
         String name = UUID.randomUUID().toString()+"imagemarker"+originName;
         if (fileName != null) {
-          return cacheDir+"/"+fileName;
+          return saveDir+"/"+fileName;
         } else if (name.endsWith(".jpg")) {
-          return cacheDir+"/"+name;
+          return saveDir+"/"+name;
         }
-        return cacheDir+"/"+name+".jpg";
+        return saveDir+"/"+name+".jpg";
     }
 }
