@@ -56,7 +56,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addText(String imgSavePath, String mark, Integer X, Integer Y, String color, String fontName, int fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
        if (TextUtils.isEmpty(mark)){
-           promise.reject("error", "mark should not be empty", null);
+           promise.reject("error", "mark should not be empty", new Throwable());
        }
         BufferedOutputStream bos = null;
         boolean isFinished;
@@ -66,7 +66,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
 
             File file = new File(imgSavePath);
             if (!file.exists()){
-                promise.reject( "error","Can't retrieve the file from the path.",null);
+                promise.reject( "error","Can't retrieve the file from the path.", new Throwable());
             }
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -198,7 +198,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
         if (TextUtils.isEmpty(mark)){
-            promise.reject("error", "mark should not be empty", null);
+            promise.reject("error", "mark should not be empty", new Throwable());
         }
         BufferedOutputStream bos = null;
         boolean isFinished;
@@ -206,7 +206,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
         try {
             File file = new File(imgSavePath);
             if (!file.exists()){
-                promise.reject("error", imgSavePath+"not exist", null);
+                promise.reject("error", imgSavePath+"not exist", new Throwable());
             }
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -386,7 +386,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             // 原图生成 - start
             File file = new File(imgSavePath);
             if (!file.exists()){
-                promise.reject( "error","Can't retrieve the file from the path.",null);
+                promise.reject( "error","Can't retrieve the file from the path.",new Throwable());
             }
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -451,7 +451,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             // marker生成 -start
             File markerFile = new File(markerPath);
             if (!markerFile.exists()){
-                promise.reject( "error","Can't retrieve the file from the path.",null);
+                promise.reject( "error","Can't retrieve the file from the path.",new Throwable());
             }
             BitmapFactory.Options markerOptions = new BitmapFactory.Options();
 
@@ -536,7 +536,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             // 原图生成 - start
             File file = new File(imgSavePath);
             if (!file.exists()){
-                promise.reject( "error","Can't retrieve the file from the path.",null);
+                promise.reject( "error","Can't retrieve the file from the path.",new Throwable());
             }
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -603,7 +603,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             // marker生成 -start
             File markerFile = new File(markerPath);
             if (!markerFile.exists()){
-                promise.reject( "error","Can't retrieve the file from the path.",null);
+                promise.reject( "error","Can't retrieve the file from the path.",new Throwable());
             }
             BitmapFactory.Options markerOptions = new BitmapFactory.Options();
 
