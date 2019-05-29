@@ -197,70 +197,76 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void addTextByPosition(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
-        if (TextUtils.isEmpty(mark)){
-            promise.reject("error", "mark should not be empty", new Throwable());
-        }
         BufferedOutputStream bos = null;
         boolean isFinished;
         Bitmap icon = null;
+
         try {
+            /**
+             * check if file and data exists
+             */
+            if (TextUtils.isEmpty(mark)){
+              promise.reject("error", "mark should not be empty", new Throwable());
+            }
             File file = new File(imgSavePath);
             if (!file.exists()){
                 promise.reject("error", imgSavePath+"not exist", new Throwable());
             }
+
+            /**
+             *  get image dimensions
+             */
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            //获取图片信息
+            // retrieve image information
             try {
-                BitmapFactory.decodeFile(imgSavePath, options); //此时返回bm为空
+                BitmapFactory.decodeFile(imgSavePath, options); // empty return at this point
             } catch (OutOfMemoryError e) {
                 System.out.print(e.getMessage());
                 System.gc();
                 System.runFinalization();
-                BitmapFactory.decodeFile(imgSavePath, options); //此时返回bm为空
+                BitmapFactory.decodeFile(imgSavePath, options); // empty return at this point
 
             }
-//            float percent =
-//                    options.outHeight > options.outWidth ? options.outHeight / 960f : options.outWidth / 960f;
-
-//            if (percent < 1) {
-//                percent = 1;
-//            }
-//            int width = (int) (options.outWidth / percent);
-//            int height = (int) (options.outHeight / percent);
             int height = options.outHeight;
             int width =  options.outWidth;
 
-            //根据图片宽高创建画布
-            try {
-                icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            } catch (OutOfMemoryError e) {
-                System.out.print(e.getMessage());
-                while(icon == null) {
-                    System.gc();
-                    System.runFinalization();
-                    icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                }
+            /**
+            * decode image and rotate if necessary (thank you samsung)
+            */
+            Paint photoPaint = new Paint();
+            photoPaint.setDither(true);
+            Bitmap originBitMap = BitmapFactory.decodeFile(imgSavePath);
+            Bitmap rotatedOrNot = ExifUtil.rotateBitmap(imgSavePath, originBitMap);
+            if (ExifUtil.switchBounds) {
+              int temp = height;
+              height = width;
+              width =  temp;
             }
 
-            //初始化画布 绘制的图像到icon上
-            Canvas canvas = new Canvas(icon);
-            //建立画笔
-            Paint photoPaint = new Paint();
-            //获取跟清晰的图像采样
-            photoPaint.setDither(true);
-            //过滤一些
-            //                    photoPaint.setFilterBitmap(true);
-            options.inJustDecodeBounds = false;
-            //创建画布背
-            Bitmap originBitMap = BitmapFactory.decodeFile(imgSavePath);
-            canvas.drawBitmap(originBitMap, 0, 0, photoPaint);
-            //建立画笔
+          /**
+           * create empty canvas with image bounds
+           */
+          try {
+            icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+          } catch (OutOfMemoryError e) {
+            System.out.print(e.getMessage());
+            while(icon == null) {
+              System.gc();
+              System.runFinalization();
+              icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            }
+          }
+          // init canvas and draw image
+          Canvas canvas = new Canvas(icon);
+          canvas.drawBitmap(rotatedOrNot, 0, 0, photoPaint);
+
+          /**
+           * create text pane and write to canvas
+           */
             Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG);
-
             textPaint.setAntiAlias(true);
-
-            //设置字体失败时使用默认字体
+            // use default font if custom not working or provided
             try {
                 textPaint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
             } catch (Exception e) {
@@ -273,12 +279,10 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             if (fontSize != null){
                 fSize = fontSize;
             }
-
             textPaint.setTextSize(fSize);
             textPaint.setColor(Color.parseColor(color));
 
             float textHeight = 0, tmpWidth = 0, maxWidth = 0, firstHeight = 0;
-
             int i = 0;
             Rect tmpTextBounds = new Rect();
             for (String line: mark.split("\n")) {
@@ -291,28 +295,15 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
                     textHeight += textPaint.descent() - textPaint.ascent();
                 }
                 tmpWidth = textPaint.measureText(line);
-                //tmpWidth = tmpTextBounds.width();
 
-                Log.v("smart-share", String.valueOf(textPaint.measureText(line)) + " vs " + tmpTextBounds.width());
                 if (tmpWidth > maxWidth) {
                     maxWidth = tmpWidth;
                 }
                 i++;
             }
-            //tmpy = tmpy - (textPaint.descent() - textPaint.ascent()) + fSize; // first line pos correction
-
-
-            /*for (String line: mark.split("\n")) {
-                canvas.drawText(line, x, y, textPaint);
-                y += textPaint.descent() - textPaint.ascent();
-                if (line.length() > lastLine.length()) {
-                    longestLine = line;
-                }
-                lastLine = line;
-            }*/
-
 
             Position pos = getRectFromPosition(position, Math.round(maxWidth), Math.round(textHeight), width, height);
+
             float radius = fSize / 4;
             int innerRectFillColor = 0x4DFFFFFF;
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -334,30 +325,23 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
                 y += textPaint.descent() - textPaint.ascent();
             }
 
-            /*Position pos = getRectFromPosition(position, textBounds.width(), textBounds.height(), width, height);
-
-            float x = pos.getX(), y = pos.getY();
-
-            for (String line: mark.split("\n")) {
-                canvas.drawText(line, x, y, textPaint);
-                y += textPaint.descent() - textPaint.ascent();
-            }*/
-
+            /**
+             * save canvas and export as file
+             */
             canvas.save(Canvas.ALL_SAVE_FLAG);
             canvas.restore();
 
             String resultFile = generateCacheFilePathForMarker(imgSavePath, fileName, saveLocation);
             bos = new BufferedOutputStream(new FileOutputStream(resultFile));
-
-//            int quaility = (int) (100 / percent > 80 ? 80 : 100 / percent);
             icon.compress(Bitmap.CompressFormat.JPEG, quality, bos);
             bos.flush();
-            //保存成功的
+            //saved successfully
             promise.resolve(resultFile);
         } catch (Exception e) {
             e.printStackTrace();
             promise.reject("error",e.getMessage(), e);
         } finally {
+            // cleanup
             isFinished = true;
             if (bos != null) {
                 try {
