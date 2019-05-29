@@ -38,7 +38,7 @@ ImageMarker.addText(
 
 ···
 
-ImageMarker.addTextByPostion(
+ImageMarker.addTextByPosition(
     Platform.OS == 'android'? img.uri.replace('file://', '') : img.uri,
     text,
     position, // topLeft, topCenter,topRight, bottomLeft, bottomCenter , bottomRight, center

@@ -196,7 +196,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
      * @param promise
      */
     @ReactMethod
-    public void addTextByPostion(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
+    public void addTextByPosition(String imgSavePath, String mark, String position, String color, String fontName, Integer fontSize, Integer quality, String fileName, String saveLocation, Promise promise) {
         if (TextUtils.isEmpty(mark)){
             promise.reject("error", "mark should not be empty", new Throwable());
         }

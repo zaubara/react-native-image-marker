@@ -348,7 +348,7 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
     }];
 }
 
-RCT_EXPORT_METHOD(addTextByPostion: (NSString *)path
+RCT_EXPORT_METHOD(addTextByPosition: (NSString *)path
                   text:(NSString*)text
                   position:(MarkerPosition)position
                   color:(NSString*)color

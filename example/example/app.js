@@ -157,7 +157,7 @@ export default class MarkerTest extends React.Component {
         console.log('====================================')
       })
     } else {
-      Marker.addTextByPostion(this.state.image, 'text marker', type, '#FF0000', 'Arial-BoldItalicMT', 44)
+      Marker.addTextByPosition(this.state.image, 'text marker', type, '#FF0000', 'Arial-BoldItalicMT', 44)
       .then((path) => {
         this.setState({
           show: true,
