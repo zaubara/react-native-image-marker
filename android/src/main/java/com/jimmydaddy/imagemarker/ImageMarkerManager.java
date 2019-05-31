@@ -386,43 +386,34 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
 
             int height = options.outHeight;
             int width =  options.outWidth;
-            try {
-                icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            } catch (OutOfMemoryError e) {
-                System.out.print(e.getMessage());
-                while(icon == null) {
-                    System.gc();
-                    System.runFinalization();
-                    icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                }
-            }
 
             //初始化画布 绘制的图像到icon上
             //建立画笔
             Paint photoPaint = new Paint();
             //获取跟清晰的图像采样
             photoPaint.setDither(true);
-            //过滤一些
-            //                    photoPaint.setFilterBitmap(true);
-            options.inJustDecodeBounds = false;
-            Bitmap prePhoto = null;
-            try {
-                prePhoto = BitmapFactory.decodeFile(imgSavePath);
-            } catch (OutOfMemoryError e) {
-                System.out.print(e.getMessage());
-                while(prePhoto == null) {
-                    System.gc();
-                    System.runFinalization();
-                    prePhoto = BitmapFactory.decodeFile(imgSavePath);
-                }
+            Bitmap prePhoto = BitmapFactory.decodeFile(imgSavePath);
+            Bitmap rotatedOrNot = ExifUtil.rotateBitmap(imgSavePath, prePhoto);
+            if (ExifUtil.switchBounds) {
+              int temp = height;
+              height = width;
+              width =  temp;
             }
-//            if (percent > 1) {
-//                prePhoto = Bitmap.createScaledBitmap(prePhoto, width, height, true);
-//            }
+
+            try {
+              icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            } catch (OutOfMemoryError e) {
+              System.out.print(e.getMessage());
+              while(icon == null) {
+                System.gc();
+                System.runFinalization();
+                icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+              }
+            }
             Canvas canvas = new Canvas(icon);
 
 
-            canvas.drawBitmap(prePhoto, 0, 0, photoPaint);
+            canvas.drawBitmap(rotatedOrNot, 0, 0, photoPaint);
 
             if (prePhoto != null && !prePhoto.isRecycled()) {
                 prePhoto.recycle();
@@ -516,7 +507,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
         Bitmap icon = null;
         Bitmap marker = null;
         try {
-
+            
             // 原图生成 - start
             File file = new File(imgSavePath);
             if (!file.exists()){
@@ -536,16 +527,6 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
 
             int height = options.outHeight;
             int width =  options.outWidth;
-            try {
-                icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            } catch (OutOfMemoryError e) {
-                System.out.print(e.getMessage());
-                while(icon == null) {
-                    System.gc();
-                    System.runFinalization();
-                    icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                }
-            }
 
             //初始化画布 绘制的图像到icon上
             Canvas canvas = new Canvas(icon);
@@ -553,25 +534,28 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             Paint photoPaint = new Paint();
             //获取跟清晰的图像采样
             photoPaint.setDither(true);
-            //过滤一些
-            //                    photoPaint.setFilterBitmap(true);
-            options.inJustDecodeBounds = false;
-            Bitmap prePhoto = null;
-            try {
-                prePhoto = BitmapFactory.decodeFile(imgSavePath);
-            } catch (OutOfMemoryError e) {
-                System.out.print(e.getMessage());
-                while(prePhoto == null) {
-                    System.gc();
-                    System.runFinalization();
-                    prePhoto = BitmapFactory.decodeFile(imgSavePath);
-                }
-            }
-//            if (percent > 1) {
-//                prePhoto = Bitmap.createScaledBitmap(prePhoto, width, height, true);
-//            }
 
-            canvas.drawBitmap(prePhoto, 0, 0, photoPaint);
+            Bitmap prePhoto = BitmapFactory.decodeFile(imgSavePath);
+            Bitmap rotatedOrNot = ExifUtil.rotateBitmap(imgSavePath, prePhoto);
+            if (ExifUtil.switchBounds) {
+              int temp = height;
+              height = width;
+              width =  temp;
+            }
+
+
+            try {
+              icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            } catch (OutOfMemoryError e) {
+              System.out.print(e.getMessage());
+              while(icon == null) {
+                System.gc();
+                System.runFinalization();
+                icon = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+              }
+            }
+
+            canvas.drawBitmap(rotatedOrNot, 0, 0, photoPaint);
 
             if (prePhoto != null && !prePhoto.isRecycled()) {
                 prePhoto.recycle();
@@ -604,7 +588,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
             }
 
             Bitmap newMarker = prePhoto;
-
+            Log.i("MARKER123", "DIMENSIONS: " + width + " - " + height + " | " + markerOptions.outWidth + " - " + markerOptions.outHeight);
             if (scale != 1 && scale >= 0){
 
                 // 取得想要缩放的matrix参数
@@ -617,11 +601,7 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
 
             Position pos = getRectFromPosition(position, newMarker.getWidth(), newMarker.getHeight(), width, height);
 
-
-
             canvas.drawBitmap(newMarker, pos.getX(), pos.getY(), photoPaint);
-
-
 
             if (prePhoto != null && !prePhoto.isRecycled()) {
                 prePhoto.recycle();
