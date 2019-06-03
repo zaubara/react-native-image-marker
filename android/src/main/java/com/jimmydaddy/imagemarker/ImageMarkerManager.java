@@ -649,8 +649,8 @@ public class ImageMarkerManager extends ReactContextBaseJavaModule {
     static Position getRectFromPosition(String position, int width, int height, int imageWidth, int imageHeigt){
         Log.d("marker", "getRectFromPosition: "+position +" width:" +width+" height: "+height + " imageWidth: " + imageHeigt+" imageHeigt:" + imageHeigt);
 
-        int left = 40;
-        int top = 40;
+        int left = (int)((imageWidth / 100f) * 2.5f);
+        int top = (int)((imageWidth / 100f) * 2.5f);
         int right = imageWidth - width;
         Position pos = new Position(left, top);
         switch (position) {
