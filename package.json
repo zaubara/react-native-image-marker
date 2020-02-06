@@ -1,15 +1,38 @@
 {
-  "name": "react-native-image-marker",
-  "version": "0.1.0",
-  "description": "mark image",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
+  "_args": [
+    [
+      "github:csae0/react-native-image-marker#samsungRotationFix",
+      "/Users/florian/Documents/_git/easily"
+    ]
+  ],
+  "_from": "github:csae0/react-native-image-marker#samsungRotationFix",
+  "_id": "react-native-image-marker@github:csae0/react-native-image-marker#35574a3a4e1ba17a6696d0d8820e0e9a66bd1d1b",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/react-native-image-marker",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "git+https://github.com/JimmyDaddy/react-native-image-marker.git"
+    "raw": "github:csae0/react-native-image-marker#samsungRotationFix",
+    "rawSpec": "github:csae0/react-native-image-marker#samsungRotationFix",
+    "saveSpec": "github:csae0/react-native-image-marker#samsungRotationFix",
+    "fetchSpec": null,
+    "gitCommittish": "samsungRotationFix"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "github:csae0/react-native-image-marker#35574a3a4e1ba17a6696d0d8820e0e9a66bd1d1b",
+  "_spec": "github:csae0/react-native-image-marker#samsungRotationFix",
+  "_where": "/Users/florian/Documents/_git/easily",
+  "author": {
+    "name": "jimmydaddy"
+  },
+  "bugs": {
+    "url": "https://github.com/JimmyDaddy/react-native-image-marker/issues"
+  },
+  "description": "mark image",
+  "homepage": "https://github.com/JimmyDaddy/react-native-image-marker#readme",
   "keywords": [
     "react-native",
     "image",
@@ -17,13 +40,18 @@
     "text",
     "watermark"
   ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "react-native-image-marker",
   "peerDependencies": {
     "react-native": ">=0.40.0"
   },
-  "author": "jimmydaddy",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JimmyDaddy/react-native-image-marker/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JimmyDaddy/react-native-image-marker.git"
   },
-  "homepage": "https://github.com/JimmyDaddy/react-native-image-marker#readme"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.0"
 }
