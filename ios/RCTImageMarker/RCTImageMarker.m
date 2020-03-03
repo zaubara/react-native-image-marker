@@ -321,7 +321,7 @@ RCT_EXPORT_METHOD(addText: (NSString *)path
 {
     NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
-    [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
+    [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
             image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image == nil) {
@@ -362,7 +362,7 @@ RCT_EXPORT_METHOD(addTextByPosition: (NSString *)path
 {
     NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
-    [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
+    [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
             if ([path hasPrefix:@"data:"] || [path hasPrefix:@"file:"]) {
                 NSURL *imageUrl = [[NSURL alloc] initWithString:path];
@@ -406,7 +406,7 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
 {
     NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
-    [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
+    [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
             image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image == nil) {
@@ -416,7 +416,7 @@ RCT_EXPORT_METHOD(markWithImage: (NSString *)path
                 return;
             }
         }
-        [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:markerPath] callback:^(NSError *markerError, UIImage *marker) {
+        [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:markerPath] callback:^(NSError *markerError, UIImage *marker) {
             if (markerError || marker == nil) {
                 marker = [[UIImage alloc] initWithContentsOfFile:path];
                 if (marker == nil) {
@@ -453,7 +453,7 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
 {
     NSString* fullPath = generateCacheFilePathForMarker(@".jpg", fileName, saveLocation);
     //这里之前是loadImageOrDataWithTag
-    [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
+    [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:path] callback:^(NSError *error, UIImage *image) {
         if (error || image == nil) {
             image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image == nil) {
@@ -463,7 +463,7 @@ RCT_EXPORT_METHOD(markWithImageByPosition: (NSString *)path
                 return;
             }
         }
-        [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:markerPath] callback:^(NSError *markerError, UIImage *marker) {
+        [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:markerPath] callback:^(NSError *markerError, UIImage *marker) {
             if (markerError || marker == nil) {
                 marker = [[UIImage alloc] initWithContentsOfFile:path];
                 if (marker == nil) {
